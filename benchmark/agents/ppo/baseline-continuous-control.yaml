@@ -33,7 +33,7 @@ run:
   resume: False
   export_formats: [model, checkpoint]
   stop:
-    time_total_s: 14400
+    time_total_s: 144000
   config:
     log_level: WARN
     num_workers: 1

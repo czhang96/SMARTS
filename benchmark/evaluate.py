@@ -143,6 +143,10 @@ def rollout(trainer, env_name, num_steps, num_episodes=0):
     policy_agent_mapping = default_policy_agent_mapping
     if hasattr(trainer, "workers") and isinstance(trainer.workers, WorkerSet):
         env = trainer.workers.local_worker().env
+        if env is None:
+            env_creator = trainer.workers.local_worker().env_creator
+            env_context = trainer.workers.local_worker().env_context
+            env = env_creator(env_context)
         multiagent = isinstance(env, MultiAgentEnv)
         if trainer.workers.local_worker().multiagent:
             policy_agent_mapping = trainer.config["multiagent"]["policy_mapping_fn"]
@@ -251,7 +255,7 @@ if __name__ == "__main__":
         scenario=args.scenario,
         config_file=args.config_file,
         checkpoint=args.checkpoint,
-        num_steps=args.checkpoint,
+        num_steps=args.num_steps,
         num_episodes=args.num_episodes,
         paradigm=args.paradigm,
         headless=args.headless,
